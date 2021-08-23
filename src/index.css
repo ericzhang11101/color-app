@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: 'Bungee Shade', cursive;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-width: 600px;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* header  */
+
+.main-header{
+  height: 6rem;
+  width: 100vw;
+  background: rgb(245, 204, 204);
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  border: 5px double black;
+  user-select: none;
+  z-index: 2;
+}
+
+.main-header-text{
+  font-size: 3rem;
+  padding-left: 2rem;
+  text-decoration: none;
+  margin-top: -0.5rem;
+  color: black;
+  font-weight: 1000;
+}
+
+/* primary container  */
+
+.content-main{
+  margin-top: 6rem;
+
+}
+
+.page-header{
+  font-weight: normal;
+  text-align: center;
+  font-weight: 600;
+  font-size: 3rem;
+}
+
+/* project container */
+
+.projects-display{
+  width: 90vw;
+  box-sizing: border-box;
+  min-height: 50px;
+  border: 2px solid gray;
+  margin: 0 5vw;
+}
+
+
+.project-text-container{
+  width: 75%;
+}
+
+.project-other-container{
+  width: 25%;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  justify-content: space-evenly;
+}

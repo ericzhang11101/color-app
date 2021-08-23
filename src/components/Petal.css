@@ -1,0 +1,90 @@
+.btn-main{
+    margin: 15rem;
+    height: 4rem;
+    width: 4rem;
+    border: 2px solid black;
+    box-sizing: border-box;
+    z-index: 3;
+    user-select: none;
+}
+
+.btn-main:hover{
+    cursor: pointer;
+}
+
+.btn-main:active{
+    background: pink;
+    border: none;
+    background: none;
+}
+
+.btn-main:active > div > .petal{
+    display: block;
+} 
+
+.btn-main:active > .petal-container{
+    visibility: visible;
+
+}
+
+.petal{
+
+    margin: calc(-1px + 0.2rem) 0.2rem 0.2rem calc(-1px + 0.2rem);
+    width: 7.6rem;
+    height: 7.6rem;
+    border: 2px solid green;
+    box-sizing: border-box;
+    border-radius: 7.6rem 0 0 0 ;
+
+    z-index: -1;
+    /* transform: translate(-1rem, -1rem); */
+
+    display: none;
+}
+
+.petal-2{
+    border-radius: 0 7.6rem  0 0 ;
+    /* transform: translate(1rem, -1rem); */
+
+}
+
+.petal-3{
+    border-radius: 0 0 0 7.6rem;
+    /* transform: translate(-1rem, 1rem); */
+
+}
+
+.petal-4{
+    border-radius: 0 0 7.6rem  0 ;
+    /* transform: translate(1rem, 1rem); */
+
+}
+
+.petal:hover{
+    background: lightgreen;
+}
+
+
+
+.petal-container{
+    width: 16rem;
+    height: 16rem;
+    box-sizing: border-box;
+
+    /* border: 2px solid red; */
+    margin-left: calc(-2px - 6rem);
+    margin-top: calc(-2px - 6rem);
+
+    /* display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%; */
+
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    z-index: -1;
+
+    visibility: hidden;
+    transform: rotate(45deg);
+
+}
