@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import Header from './components/Header.js'
 import ProjectMain from './components/ProjectMain.js'
 import Homepage from './components/Homepage.js'
+import SignIn from './components/SignIn.js'
+
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 import uniqid from 'uniqid'
@@ -11,6 +13,7 @@ import ColorObj from './components/objects/ColorObj.js'
 
 // temp
 import ColorButton from './components/ColorButton.js'
+import { UserContext } from './components/UserContext.js'
 
 // let projects = (get from storage)
 
@@ -42,28 +45,42 @@ export default function Routes() {
  
      }
 
+    const [user, setUser] = useState()
+
+    if (user){
+        console.log(user)
+        if (user.a == null) setUser()
+    }
      
 
     return (
         <BrowserRouter>
-            <Header /> 
-            <div className='content-main'>
-                <Switch>
-                    <Route path={['/home', '/']} exact>
-                        <Homepage />
-                    </Route>
-                    <Route 
-                        path="/projects" 
-                        render = {() => (
-                            <ProjectMain projects={projects} />
-                        )}
-                    />
+            <UserContext.Provider value={{user, setUser}}>
+                <Header /> 
+                <div className='content-main'>
+                    <Switch>
 
-                    <Route path="/button">
-                        <ColorButton />
-                    </Route>
-                </Switch>
-            </div>
+                            <Route path={['/home', '/']} exact>
+                                <Homepage />
+                            </Route>
+                            <Route 
+                                path="/projects" 
+                                render = {() => (
+                                    <ProjectMain projects={projects} />
+                                )}
+                            />
+
+                            <Route path="/button">
+                                <ColorButton />
+                            </Route>
+
+                            <Route path="/login">
+                                <SignIn />
+                            </Route>
+                    </Switch>
+                </div>
+            </UserContext.Provider>
+            
 
         </BrowserRouter>
     )

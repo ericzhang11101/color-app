@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import styled from 'styled-components'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import ColorPreview from './ColorPreview.js'
 import CategoryModal from './CategoryModal'
 import Category from './Category.js'
+import {UserContext } from './UserContext'
 
 
 const ProjectHeader = styled.h1`
@@ -40,6 +41,8 @@ const BtnContainer = styled.div`
 `
 
 export default function ProjectDisplay({match}) {
+
+    const {user, setUser} = useContext(UserContext)
 
     // useEffect redux store
     
