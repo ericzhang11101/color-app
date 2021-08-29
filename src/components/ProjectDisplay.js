@@ -40,18 +40,11 @@ const BtnContainer = styled.div`
     padding-top: 1rem;
 `
 
-export default function ProjectDisplay({match}) {
+export default function ProjectDisplay(props) {
 
     const {user, setUser} = useContext(UserContext)
-
-    // useEffect redux store
     
-    function addCategory(){
-        // show stuff
-        
-        // redux stuff
-    
-    }
+    console.log(props)
 
     const colors = [
         {
@@ -89,7 +82,7 @@ export default function ProjectDisplay({match}) {
     return (
         <div>
             {/* <CategoryModal></CategoryModal> */}
-            <ProjectHeader>{match.params.id}</ProjectHeader>  
+            <ProjectHeader>{props.id}</ProjectHeader>  
 
             {/* props.map(category => return <category/>) 
                 category props: array of colors, category name

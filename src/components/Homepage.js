@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 
 import firebase from '../config/firebase-config'
-
 import { UserContext } from './UserContext'
+
 import logOut from '../service/logOut'
 
 const FlexContainer = styled.div`

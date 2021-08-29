@@ -29,22 +29,6 @@ export default function Routes() {
      // projects > project > category > color
      const [projects, setProjects] = useState(defaultProj)
 
-     function createProject(){
- 
-     }
- 
-     function createCat(){
- 
-     }
- 
-     function addColorToCat(){
- 
-     }
- 
-     function getFirstFive(){
- 
-     }
-
     const [user, setUser] = useState()
 
     if (user){

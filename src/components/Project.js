@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import ColorPreview from './ColorPreview.js'
@@ -68,10 +68,13 @@ export default function Project(props) {
 
     const { project } = props
 
+    console.log('project: ')
+    console.log(project)
+
 
     return (
         <div>
-            <StyledProject to={`/projects/${project.id}`}>
+            <StyledProject to={`/projects/${project.id}`} project={project}>
                 <div className='project-text-container'>
                     <ProjectHeader>
                         {project.name}
