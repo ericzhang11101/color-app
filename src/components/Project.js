@@ -71,7 +71,7 @@ export default function Project(props) {
     // console.log(props)
     // let p = props.project
     // console.log(p)
-
+    
 
     return (
         <div>

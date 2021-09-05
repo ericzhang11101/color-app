@@ -52,16 +52,29 @@ export default function ProjectMain(props) {
                     let projectInfo = await userRef.collection(name).get()
     
                     if (projectInfo.docs.length > 0){
-                        projectInfo.docs.forEach(async (doc) => {
+                        // console.log(projectInfo.docs)
+                        await projectInfo.docs.forEach(async (doc) => {
                             if (doc.id === '***info'){
                                 tempProj.description = await doc.data().Description
                                 tempProj.id = await doc.data().Id
                             }
                             else {
-                                tempProj.categories = [...tempProj.categories, await doc.data()]
+                                // console.log('categories: ')
+                                // console.log('doc data: ' + doc.id)
+                                // console.log(await doc.data())
+                                let updatedCategories = [
+                                    ...tempProj.categories, 
+                                    {
+                                        id: doc.id,
+                                        colors: doc.data()
+                                    }
+                                ]
+
+                                tempProj.categories = updatedCategories
+ 
                             }
                         })
-
+                        console.log(tempProj)
                         projArr.push(tempProj)
                     }
                     
@@ -100,8 +113,11 @@ export default function ProjectMain(props) {
 
     function getProject(id){
         for (let i = 0; i < projectArr.length; i++){
-            if (projectArr[i].name == id) return projectArr[i]
+            if (projectArr[i].name == id) {
+                // console.log(projectArr[i])
+                return projectArr[i]
         }
+            }
         return false
     }
 
@@ -133,9 +149,6 @@ export default function ProjectMain(props) {
                             } */}
                             {
                                 projectArr.map(proj => {
-                                    // console.log('from jsx')
-                                    // console.log('proj: ')
-                                    // console.log(proj)
                                     return (<Project project={proj} />)
                                 })
                             }

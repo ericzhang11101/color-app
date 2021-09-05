@@ -43,23 +43,38 @@ const BtnContainer = styled.div`
 export default function ProjectDisplay(props) {
 
     const {user, setUser} = useContext(UserContext)
-    const { categories, setCategories } = useState({})
+    const [ categories, setCategories ] = useState(
+        [
+            {
+                name: 'header main',
+                color: '#FF00FF', 
+                id: "ree"
+            }
+        ]   
+    )
+
     /*
         category obj
         name: str,
         fields: [
-            {NAME: COLOR (value)},
+            {   
+                NAME: HEADER TEXT,
+                COLOR:  
+            },
             ...
         ]
     */
     
-
+    useEffect(() => {
+        console.log(props.categories)
+        setCategories(props.categories)
+    }, [])
 
     console.log(props)
+
     const getProject = async function(){
         let p = await props.project()
-        console.log(p)
-        console.log(p.categories[0])
+        // console.log(p.categories[0])
     }
 
     getProject()
@@ -70,31 +85,17 @@ export default function ProjectDisplay(props) {
             color: '#FF00FF', 
             id: "ree"
         },
-        {
-            name: 'header secondary',
-            color: '#32CD32', 
-            id: "ree2"
-        },
-        {
-            name: 'text',
-            color: '#008080', 
-            id: "ree3"
-        },
-        {
-            name: 'header main',
-            color: '#FF00FF', 
-            id: "ree"
-        },
-        {
-            name: 'header secondary',
-            color: '#32CD32', 
-            id: "ree2"
-        },
-        {
-            name: 'text',
-            color: '#008080', 
-            id: "ree3"
-        }
+        // {
+        //     name: 'header secondary',
+        //     color: '#32CD32', 
+        //     id: "ree2"
+        // },
+        // {
+        //     name: 'text',
+        //     color: '#008080', 
+        //     id: "ree3"
+        // }
+
     ]
 
     return (
@@ -106,10 +107,21 @@ export default function ProjectDisplay(props) {
                 category props: array of colors, category name
             */}
 
-            <CategoryHeader>Category</CategoryHeader>
+            {/* <CategoryHeader>Category</CategoryHeader>
+
             <Category colors={colors}>
                 
-            </Category>  
+            </Category>   */}
+
+            {
+                // categories.map((category) => {
+                //     return (
+                //         <>
+                //             <h1>{category}</h1>
+                //         </>
+                //     )
+                // })
+            }
 
             <BtnContainer>
                 <NewCategoryButton>
