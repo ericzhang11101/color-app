@@ -6,7 +6,7 @@ import { Route, Switch, Link, BrowserRouter, RouteComponentProps} from 'react-ro
 
 import Project from './Project.js'
 import ProjectDisplay from './ProjectDisplay.js'
-
+import ProjectModal from './ProjectModal'
 
 import firebase from '../config/firebase-config'
 import { UserContext } from './UserContext'
@@ -29,6 +29,7 @@ export default function ProjectMain(props) {
     
     let {user, setUser} = useContext(UserContext)
     let [projectArr, setProjectArr] = useState([])
+    let [modalVisibility, setModalVisibility] = useState(true)
 
     useEffect(() => {
         let db = firebase.firestore()
@@ -78,6 +79,19 @@ export default function ProjectMain(props) {
         
     }, [])
 
+    useEffect(() => {
+        setModalVisibility(false)
+    }, [])
+
+    function displayProjectModal(){
+        setModalVisibility(true)
+        console.log('project visibiliy: ' + modalVisibility)
+    }
+
+    function hideProjectModal(){
+        setModalVisibility(false)
+    }
+
     return (
         <BrowserRouter>
             <Switch>
@@ -105,9 +119,17 @@ export default function ProjectMain(props) {
                                 })
                             }
                         </div>
-                        <CreateButton>
+                        <CreateButton onClick={() => {displayProjectModal()}}>
                             New Project
                         </CreateButton>
+                        {
+                            modalVisibility ? 
+                            <ProjectModal 
+                                closeModal={hideProjectModal}
+                            /> 
+                            : 
+                            null
+                        }
                     </div>
                 </Route>
             </Switch>

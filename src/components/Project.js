@@ -68,8 +68,6 @@ export default function Project(props) {
 
     const { project } = props
 
-    console.log('project: ')
-    console.log(project)
 
 
     return (
