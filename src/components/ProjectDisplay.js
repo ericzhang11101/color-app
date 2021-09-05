@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import styled from 'styled-components'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import ColorPreview from './ColorPreview.js'
@@ -43,9 +43,27 @@ const BtnContainer = styled.div`
 export default function ProjectDisplay(props) {
 
     const {user, setUser} = useContext(UserContext)
+    const { categories, setCategories } = useState({})
+    /*
+        category obj
+        name: str,
+        fields: [
+            {NAME: COLOR (value)},
+            ...
+        ]
+    */
     
-    console.log(props)
 
+
+    console.log(props)
+    const getProject = async function(){
+        let p = await props.project()
+        console.log(p)
+        console.log(p.categories[0])
+    }
+
+    getProject()
+    
     const colors = [
         {
             name: 'header main',

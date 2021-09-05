@@ -19,6 +19,7 @@ const CreateButton = styled.button`
     font-family: 'Bungee', cursive;
     margin-left: calc(90vw - 8rem);
     margin-top: 1rem;
+    margin-bottom: 1rem;
     
 `
 
@@ -50,17 +51,22 @@ export default function ProjectMain(props) {
     
                     let projectInfo = await userRef.collection(name).get()
     
-                    projectInfo.docs.forEach(async (doc) => {
-                        if (doc.id === '***info'){
-                            tempProj.description = await doc.data().Description
-                            tempProj.id = await doc.data().Id
-                        }
-                        else {
-                            tempProj.categories = [...tempProj.categories, await doc.data()]
-                        }
-                    })
+                    if (projectInfo.docs.length > 0){
+                        projectInfo.docs.forEach(async (doc) => {
+                            if (doc.id === '***info'){
+                                tempProj.description = await doc.data().Description
+                                tempProj.id = await doc.data().Id
+                            }
+                            else {
+                                tempProj.categories = [...tempProj.categories, await doc.data()]
+                            }
+                        })
+
+                        projArr.push(tempProj)
+                    }
+                    
     
-                    projArr.push(tempProj)
+                    
                     if (userProjects.indexOf(name) === userProjects.length -1) ressolve()
     
                 })
@@ -77,7 +83,7 @@ export default function ProjectMain(props) {
             getProjects()   
         }
         
-    }, [])
+    }, [modalVisibility])
 
     useEffect(() => {
         setModalVisibility(false)
@@ -92,13 +98,27 @@ export default function ProjectMain(props) {
         setModalVisibility(false)
     }
 
+    function getProject(id){
+        for (let i = 0; i < projectArr.length; i++){
+            if (projectArr[i].name == id) return projectArr[i]
+        }
+        return false
+    }
+
     return (
         <BrowserRouter>
             <Switch>
                 <Route exact path='/projects/:id' 
                     render={(props) => {
                         const id = props.match.params.id
-                        return (<ProjectDisplay id={id} project={projectArr} />)
+                        console.log('id: ' + id)
+                        return (
+                            <ProjectDisplay 
+                                id={id} 
+                                project={() => {
+                                    return getProject(id)
+                                }} 
+                            />)
                     }}
                 />
                 {/* project id -> look through redux and render correct one */}
@@ -114,6 +134,7 @@ export default function ProjectMain(props) {
                             {
                                 projectArr.map(proj => {
                                     // console.log('from jsx')
+                                    // console.log('proj: ')
                                     // console.log(proj)
                                     return (<Project project={proj} />)
                                 })

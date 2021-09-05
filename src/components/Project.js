@@ -68,11 +68,14 @@ export default function Project(props) {
 
     const { project } = props
 
+    // console.log(props)
+    // let p = props.project
+    // console.log(p)
 
 
     return (
         <div>
-            <StyledProject to={`/projects/${project.id}`} project={project}>
+            <StyledProject to={`/projects/${project.name}`} name={project.name} categories={project.categories}>
                 <div className='project-text-container'>
                     <ProjectHeader>
                         {project.name}

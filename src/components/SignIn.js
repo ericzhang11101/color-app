@@ -34,17 +34,12 @@ export default function SignIn() {
         
         const login = await socialMediaAuth(googleProvider)
         setUser(login, () => {
-            console.log('state set')
             history.push('/projects')
         })
-
-
-        console.log(login)
     }
 
     useEffect(() =>{
         if (user){
-            console.log('state set')
             history.push('/projects')
         }
     }, [user])
@@ -52,7 +47,6 @@ export default function SignIn() {
     const handleLogOut = async function(){
        logOut()
        setUser()
-        console.log(user)
     }
 
     return (

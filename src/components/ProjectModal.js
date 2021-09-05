@@ -88,9 +88,9 @@ export default function ProjectModal(props) {
 
         let projects = await getProjectList()
         if (projects && indexOfSimilar(projects, title) === -1){
-            console.log('adding projects')
-            addProjectToList(title)
-            storeProject(title)
+            Promise.all([addProjectToList(title), storeProject(title, description)]).then(() => {
+                closeModal()
+            })
         }
 
         
@@ -99,13 +99,11 @@ export default function ProjectModal(props) {
     }
 
     function indexOfSimilar(array, target){
-        console.log(array)
 
         target = target.trim().toLowerCase()
 
         for (let i = 0; i < array.length; i++){
             let title = array[i].trim().toLowerCase()
-            console.log(title)
             if (target === title) {
                 console.log('not unique')
                 return i
@@ -137,10 +135,16 @@ export default function ProjectModal(props) {
     const storeProject = async function(title, description){
         let db = firebase.firestore()
         let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
 
-        userRef.doc('testproject/test').set({
-            
-        })
+        db 
+            .collection('Users')
+            .doc(user)
+            .collection(title)
+            .doc('***info')
+            .set({
+                Description: description
+            })
     }
     return (
         <Modal id={'modal'}>

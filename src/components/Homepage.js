@@ -67,8 +67,6 @@ export default function Homepage() {
     const handleLogout = function(){
         logOut()
         setUser()
-        console.log(user)
-
     }
 
     // firebase.firestore().collection('test').add({
