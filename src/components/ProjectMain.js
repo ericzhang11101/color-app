@@ -23,6 +23,20 @@ const CreateButton = styled.button`
     
 `
 
+const PageHeader = styled.h1`
+    font-weight: normal;
+    text-align: center;
+    font-weight: 600;
+    font-size: 3rem;
+`
+
+const ProjectsDisplay = styled.div`
+    width: 90vw;
+    box-sizing: border-box;
+    min-height: 50px;
+    border: 2px solid gray;
+    margin: 0 5vw;
+`
 
 export default function ProjectMain(props) {
     // console.log(props)
@@ -140,19 +154,16 @@ export default function ProjectMain(props) {
                 {/* project id -> look through redux and render correct one */}
                 <Route path='/projects' exact>
                     <div>
-                        <h1 className="page-header">Projects</h1>
-                        <div className='projects-display'>
-                            {/* {
-                                projects.map(proj => {
-                                    return (<Project project={proj} />)
-                                })
-                            } */}
+                        <PageHeader>
+                            Projects
+                        </PageHeader>
+                        <ProjectsDisplay >
                             {
                                 projectArr.map(proj => {
                                     return (<Project project={proj} />)
                                 })
                             }
-                        </div>
+                        </ProjectsDisplay>
                         <CreateButton onClick={() => {displayProjectModal()}}>
                             New Project
                         </CreateButton>

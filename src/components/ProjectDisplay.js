@@ -1,10 +1,13 @@
 import React, {useContext, useState, useEffect} from 'react'
 import styled from 'styled-components'
 import { Link, RouteComponentProps } from 'react-router-dom'
+
 import ColorPreview from './ColorPreview.js'
 import CategoryModal from './CategoryModal'
 import Category from './Category.js'
-import {UserContext } from './UserContext'
+
+import firebase from '../config/firebase-config'
+import { UserContext } from './UserContext'
 
 
 const ProjectHeader = styled.h1`
@@ -17,7 +20,7 @@ const CategoryHeader = styled.h2`
 `
 
 const NewCategoryButton = styled.button`
-    width: 10rem;
+    width: 20rem;
     border: 3px solid black;
     background: none;
     padding: 0.25rem 1rem;
@@ -53,6 +56,8 @@ export default function ProjectDisplay(props) {
         ]   
     )
 
+    const [modalVisibility, setModalVisibility] = useState(true)
+
     /*
         category obj
         name: str,
@@ -66,18 +71,20 @@ export default function ProjectDisplay(props) {
     */
     
     useEffect(() => {
-        console.log(props.categories)
-        setCategories(props.categories)
+        console.log(props.project().categories)
+        setCategories(props.project().categories)
+        setModalVisibility(false)
     }, [])
+
 
     console.log(props)
 
-    const getProject = async function(){
-        let p = await props.project()
-        // console.log(p.categories[0])
-    }
+    // const getProject = async function(){
+    //     let p = await props.project()
+    //     // console.log(p.categories[0])
+    // }
 
-    getProject()
+    // getProject()
     
     const colors = [
         {
@@ -98,6 +105,51 @@ export default function ProjectDisplay(props) {
 
     ]
 
+    async function addCategory(name){
+        console.log(name)
+        
+        let db = firebase.firestore()
+        let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
+
+        await db 
+            .collection('Users')
+            .doc(user)
+            .collection(props.id)
+            .doc(name)
+            .get()
+            .then((snapshot) => {
+                console.log(snapshot.exists)
+                if (snapshot.exists) {
+                    // handle existing thign 
+                    // show some popup
+                    console.log('already exists!')
+                }
+                else {
+                    console.log('adding new')
+                    db
+                        .collection('Users')
+                        .doc(user)
+                        .collection(props.id)
+                        .doc(name)
+                        .set({
+                        })
+                }
+            })
+
+ 
+    }
+
+
+    function showModal(){
+        setModalVisibility(true)
+    }
+
+    function hideModal(){
+        setModalVisibility(false)
+    }
+
+
     return (
         <div>
             {/* <CategoryModal></CategoryModal> */}
@@ -114,21 +166,38 @@ export default function ProjectDisplay(props) {
             </Category>   */}
 
             {
-                // categories.map((category) => {
-                //     return (
-                //         <>
-                //             <h1>{category}</h1>
-                //         </>
-                //     )
-                // })
+                categories ? 
+                    categories.map((category) => {
+                        return (
+                                <Category 
+                                    colors={category.colors} 
+                                    name = {category.id}
+                                />
+
+                        )
+                    })
+                    
+                    :
+
+                    null
+
             }
 
             <BtnContainer>
-                <NewCategoryButton>
-                    Add New
+                <NewCategoryButton onClick={() => {showModal()}}>
+                    New Category
                 </NewCategoryButton>
             </BtnContainer>
-
+            {
+                            modalVisibility ? 
+                            <CategoryModal 
+                                closeModal={hideModal}
+                                project={props.id}
+                                createCategory={(name) => {addCategory(name)}}
+                            /> 
+                            : 
+                            null
+                        }
         </div>
     )
 }

@@ -92,9 +92,6 @@ export default function ProjectModal(props) {
                 closeModal()
             })
         }
-
-        
-
         return false;
     }
 

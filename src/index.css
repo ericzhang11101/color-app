@@ -11,28 +11,10 @@ code {
     monospace;
 }
 
-/* header  */
 
-.main-header{
-  height: 6rem;
-  width: 100vw;
-  background: rgb(245, 204, 204);
-  position: fixed;
-  top: 0;
-  left: 0;
-  box-sizing: border-box;
-  border: 5px double black;
-  user-select: none;
-  z-index: 2;
-}
 
 .main-header-text{
-  font-size: 3rem;
-  padding-left: 2rem;
-  text-decoration: none;
-  margin-top: -0.5rem;
-  color: black;
-  font-weight: 1000;
+
 }
 
 /* primary container  */
