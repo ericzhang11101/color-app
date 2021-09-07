@@ -88,7 +88,6 @@ export default function ProjectMain(props) {
  
                             }
                         })
-                        console.log(tempProj)
                         projArr.push(tempProj)
                     }
                     
@@ -141,7 +140,6 @@ export default function ProjectMain(props) {
                 <Route exact path='/projects/:id' 
                     render={(props) => {
                         const id = props.match.params.id
-                        console.log('id: ' + id)
                         return (
                             <ProjectDisplay 
                                 id={id} 
@@ -149,6 +147,13 @@ export default function ProjectMain(props) {
                                     return getProject(id)
                                 }} 
                             />)
+                        // return (
+                        //     <ProjectDisplay 
+                        //         id={id} 
+                        //         project={() => {
+                        //             return getProject(id)
+                        //         }} 
+                        //     />)
                     }}
                 />
                 {/* project id -> look through redux and render correct one */}

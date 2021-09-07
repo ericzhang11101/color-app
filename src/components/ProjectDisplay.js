@@ -46,6 +46,7 @@ const BtnContainer = styled.div`
 export default function ProjectDisplay(props) {
 
     const {user, setUser} = useContext(UserContext)
+
     const [ categories, setCategories ] = useState(
         [
             {
@@ -56,7 +57,7 @@ export default function ProjectDisplay(props) {
         ]   
     )
 
-    const [modalVisibility, setModalVisibility] = useState(true)
+    const [modalVisibility, setModalVisibility] = useState(false)
 
     /*
         category obj
@@ -73,52 +74,58 @@ export default function ProjectDisplay(props) {
         
     useEffect(() => {
         console.log(props.project().categories)
-        setCategories(props.project().categories)
-        // let db = firebase.firestore()
-        // let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
-
-        // db 
-        // .collection('Users')
-        // .doc(user)
-        // .collection(title)
-        // .docs()
-
-
-        setModalVisibility(false)
-    }, [])
-
+        async function get(){
+            let temp = await props.project().categories;
+            setCategories(temp)
+        }
+        get()
+    }, [])  
 
     useEffect(() => {
-        getCategories()
+        async function update(){
+            let db = firebase.firestore()
+            let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+            let projectInfo = await userRef.collection(props.id).get()
+            
+            let newCategories = []
+
+            if (projectInfo.docs.length > 0){
+                await projectInfo.docs.forEach(async (doc) => {
+                    if (doc.id !== '***info'){
+                        newCategories = [
+                            ...newCategories,
+                            {
+                                id: doc.id,
+                                colors: doc.data()
+                            }
+                        ]
+                    }
+                })
+                setCategories(newCategories)
+            }
+
+
+        }
+
+        
+
+        update()
+
+        console.log('updating')
     }, [modalVisibility])
 
-    // const getProject = async function(){
-    //     let p = await props.project()
-    //     // console.log(p.categories[0])
-    // }
-
-    // getProject()
     
     const colors = [
         {
             name: 'header main',
             color: '#FF00FF', 
             id: "ree"
-        },
-        // {
-        //     name: 'header secondary',
-        //     color: '#32CD32', 
-        //     id: "ree2"
-        // },
-        // {
-        //     name: 'text',
-        //     color: '#008080', 
-        //     id: "ree3"
-        // }
-
+        }
     ]
 
     async function addCategory(name){
+
+        console.log('adding: ' + name)
         
         let db = firebase.firestore()
         let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
@@ -149,8 +156,6 @@ export default function ProjectDisplay(props) {
                 }
             })
             .then(() => {setModalVisibility(false)})
-
- 
     }
 
 
@@ -158,9 +163,11 @@ export default function ProjectDisplay(props) {
         setModalVisibility(true)
     }
 
+
     function hideModal(){
         setModalVisibility(false)
     }
+
 
     function getColors(title){
         let db = firebase.firestore()
@@ -173,18 +180,24 @@ export default function ProjectDisplay(props) {
         .docs()
     }
 
+
     function getCategories(){
         let db = firebase.firestore()
         let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
 
-        db 
+        let projectId = props.id 
+
+
+        let data = db 
         .collection('Users')
         .doc(user)
-        .collection(title)
-        .docs()
+        .collection(projectId)
+        .get()
+
         
     }
 
+    
 
     return (
         <div>
@@ -204,7 +217,7 @@ export default function ProjectDisplay(props) {
             {
                 categories ? 
                     categories.map((category) => {
-                        console.log(categories)
+
                         return (
                                 <Category 
                                     colors={category.colors} 
@@ -229,7 +242,7 @@ export default function ProjectDisplay(props) {
             {
                             modalVisibility ? 
                             <CategoryModal 
-                                closeModal={hideModal}
+                                closeModal={() => {hideModal()}}
                                 project={props.id}
                                 createCategory={(name) => {addCategory(name)}}
                             /> 

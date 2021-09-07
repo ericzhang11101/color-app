@@ -1,5 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
+// import { faEdit } from '@fortawesome/fontawesome-svg-core'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+import { FaEdit, FaCopy, FaTrash } from "react-icons/fa"; 
 
 const CategoryDiv = styled.div`
     border: 4px double black;
@@ -20,6 +24,7 @@ const ColorDisplay = styled.div`
     flex-direction: row;
     justify-content: flex-start;
 
+    overflow: hidden;
 `
 
 const ColorHeader = styled.div`
@@ -50,11 +55,11 @@ const ColoredDivRight = styled.div`
 `
 
 const Button = styled.div`
-    padding: 0rem 2rem;
+    padding: 0rem 1rem;
     font-size: 1.25rem;
     font-weight: bold;
     border-radius: 0.5rem;
-    margin: 0.7rem 1rem;
+    margin: 0.7rem 0.5rem;
     background: ${props => props.bgColor || "lightpink"};
     border: 2px solid ${props => props.bgColor || 'lightpink'};
     user-select: none;
@@ -95,8 +100,9 @@ export default function Category(props) {
 
     if (colorState) {
         keys = Object.keys(colorState)
-        // console.log('keys')
-        // console.log(keys)
+        console.log('keys')
+        console.log(keys)
+        console.log(colorState.background)
     }
 
     return (
@@ -105,27 +111,45 @@ export default function Category(props) {
             {
                 keys && keys.length > 0 ? 
                     keys.map(c =>{
-                        console.log(c)
+
                         return (
                             <ColorDisplay >
                                 <InfoGrid>
                                     <ColorHeader bgColor={c}>
-                                        <h2>{c.name}</h2>
+                                        <h2>{c}</h2>
                                     </ColorHeader>
                                     <ColoredDivRight bgColor={'#FF00FF'}>
                                     </ColoredDivRight>
                                 </InfoGrid>
                                 <BtnGrid>
                                     <Button onClick={'a'}>
-                                        copy
+                                        <FaCopy 
+                                            style={
+                                                {
+                                                    size: "10rem"
+                                                }
+                                            }
+                                        />
                                     </Button>
                                     
                                     <Button>
-                                        edit
+                                        <FaEdit 
+                                            style={
+                                                {
+                                                    size: "10rem"
+                                                }
+                                            }
+                                        />
                                     </Button>
-
+                                    
                                     <Button>
-                                        delete
+                                        <FaTrash 
+                                            style={
+                                                {
+                                                    size: "10rem"
+                                                }
+                                            }
+                                        />
                                     </Button>
                                 </BtnGrid>
                             </ColorDisplay>
