@@ -70,14 +70,27 @@ export default function ProjectDisplay(props) {
         ]
     */
     
+        
     useEffect(() => {
         console.log(props.project().categories)
         setCategories(props.project().categories)
+        // let db = firebase.firestore()
+        // let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
+
+        // db 
+        // .collection('Users')
+        // .doc(user)
+        // .collection(title)
+        // .docs()
+
+
         setModalVisibility(false)
     }, [])
 
 
-    console.log(props)
+    useEffect(() => {
+        getCategories()
+    }, [modalVisibility])
 
     // const getProject = async function(){
     //     let p = await props.project()
@@ -106,7 +119,6 @@ export default function ProjectDisplay(props) {
     ]
 
     async function addCategory(name){
-        console.log(name)
         
         let db = firebase.firestore()
         let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
@@ -136,6 +148,7 @@ export default function ProjectDisplay(props) {
                         })
                 }
             })
+            .then(() => {setModalVisibility(false)})
 
  
     }
@@ -147,6 +160,29 @@ export default function ProjectDisplay(props) {
 
     function hideModal(){
         setModalVisibility(false)
+    }
+
+    function getColors(title){
+        let db = firebase.firestore()
+        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
+
+        db 
+        .collection('Users')
+        .doc(user)
+        .collection(title)
+        .docs()
+    }
+
+    function getCategories(){
+        let db = firebase.firestore()
+        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
+
+        db 
+        .collection('Users')
+        .doc(user)
+        .collection(title)
+        .docs()
+        
     }
 
 
@@ -168,10 +204,12 @@ export default function ProjectDisplay(props) {
             {
                 categories ? 
                     categories.map((category) => {
+                        console.log(categories)
                         return (
                                 <Category 
                                     colors={category.colors} 
                                     name = {category.id}
+                                    getColors={(title) => {getColors(title)}}
                                 />
 
                         )

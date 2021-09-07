@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from 'styled-components'
 
 const CategoryDiv = styled.div`
@@ -84,44 +84,56 @@ const CategoryHeader = styled.h1`
 
 export default function Category(props) {
     const {colors, name} = props
-    console.log(colors)
-    console.log(name)
-    let keys = colors.keys
+    
+    const [ colorState, setColorState ] = useState({})
+
+    useEffect(() => {
+        if (colors) setColorState(colors)
+    }, [])
+
+    let keys = null
+
+    if (colorState) {
+        keys = Object.keys(colorState)
+        // console.log('keys')
+        // console.log(keys)
+    }
+
     return (
         <CategoryDiv>
             <CategoryHeader>{name}</CategoryHeader>
             {
-                // colors ? 
-                //     colors.map(c =>{
-                //         console.log(c)
-                //         return (
-                //             <ColorDisplay >
-                //                 <InfoGrid>
-                //                     <ColorHeader bgColor={c.color}>
-                //                         <h2>{c.name}</h2>
-                //                     </ColorHeader>
-                //                     <ColoredDivRight bgColor={c.color}>
-                //                     </ColoredDivRight>
-                //                 </InfoGrid>
-                //                 <BtnGrid>
-                //                     <Button onClick={'a'}>
-                //                         copy
-                //                     </Button>
+                keys && keys.length > 0 ? 
+                    keys.map(c =>{
+                        console.log(c)
+                        return (
+                            <ColorDisplay >
+                                <InfoGrid>
+                                    <ColorHeader bgColor={c}>
+                                        <h2>{c.name}</h2>
+                                    </ColorHeader>
+                                    <ColoredDivRight bgColor={'#FF00FF'}>
+                                    </ColoredDivRight>
+                                </InfoGrid>
+                                <BtnGrid>
+                                    <Button onClick={'a'}>
+                                        copy
+                                    </Button>
                                     
-                //                     <Button>
-                //                         edit
-                //                     </Button>
+                                    <Button>
+                                        edit
+                                    </Button>
 
-                //                     <Button>
-                //                         delete
-                //                     </Button>
-                //                 </BtnGrid>
-                //             </ColorDisplay>
-                //         )
+                                    <Button>
+                                        delete
+                                    </Button>
+                                </BtnGrid>
+                            </ColorDisplay>
+                        )
 
-                //     })
-                //     :
-                //     null
+                    })
+                    :
+                    null
             }
         </CategoryDiv>
     )
