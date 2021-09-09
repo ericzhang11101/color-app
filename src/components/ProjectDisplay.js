@@ -9,6 +9,7 @@ import Category from './Category.js'
 import firebase from '../config/firebase-config'
 import { UserContext } from './UserContext'
 
+import uniqid from 'uniqid'
 
 const ProjectHeader = styled.h1`
     text-align: center;
@@ -74,12 +75,14 @@ export default function ProjectDisplay(props) {
     
         
     useEffect(() => {
-        console.log(props.project().categories)
+
         async function get(){
+            await props.updateProjects()
             let temp = await props.project().categories;
             setCategories(temp)
         }
         get()
+
     }, [])  
 
     useEffect(() => {
@@ -90,7 +93,7 @@ export default function ProjectDisplay(props) {
             
             let newCategories = []
 
-            if (projectInfo.docs.length > 0){
+            if (projectInfo.docs && projectInfo.docs.length > 0){
                 await projectInfo.docs.forEach(async (doc) => {
                     if (doc.id !== '***info'){
                         newCategories = [
@@ -104,15 +107,43 @@ export default function ProjectDisplay(props) {
                 })
                 setCategories(newCategories)
             }
-
-
         }
-
     
         update()
 
-        console.log('updating')
     }, [modalVisibility])
+
+    async function updateCategories(){
+        let db = firebase.firestore()
+        let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+
+        let projInfo = await userRef.collection(props.id).get()
+
+
+        let tempCategories = []
+        let projectPromsise = new Promise((ressolve, reject) => {
+            projInfo.forEach(async (proj) => {
+                if (proj.id !== '***info'){
+                    let tempCategory = {
+                        id: proj.id,
+                        colors: proj.data(),
+                        key: uniqid()
+                    }
+                    tempCategories.push(tempCategory)
+                }
+
+                if (projInfo.docs && tempCategories.length + 1 === projInfo.docs.length) ressolve()
+            })
+
+        })
+
+
+        projectPromsise.then(() => {
+            setCategories(tempCategories)
+            console.log(tempCategories)
+            
+        }) 
+    }
 
     
     const colors = [
@@ -185,8 +216,7 @@ export default function ProjectDisplay(props) {
         let db = firebase.firestore()
         let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
         let projectId = props.id 
-        
-
+    
         name = name.toLowerCase().trim()
         await db 
             .collection('Users')
@@ -196,8 +226,12 @@ export default function ProjectDisplay(props) {
             .update({
                 [name]: color
             })
-
-        hideModal()
+            .then(() => {
+                updateCategories()
+            })
+            .catch((e) => {
+                console.error('failed to add '+ color)
+            })
 
         // update 
 
@@ -218,10 +252,45 @@ export default function ProjectDisplay(props) {
             .update({
                 [name]: firebase.firestore.FieldValue.delete()
             })
+            .then(() => {
+                updateCategories()
+            })
 
-        hideModal()
+        
+        // let temp = [...categories]
+
+        // for (let i = 0; i < temp.length; i++){
+        //     if (temp[i].id === category){
+        //         temp[i].key = uniqid()
+        //     }
+        // }
+        // setCategories(temp)
     }
 
+    async function removeCategory(category){
+        console.log('removing ' + category)
+
+        let db = firebase.firestore()
+        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
+        let projectId = props.id
+        // switch to context user
+
+        db
+            .collection('Users')
+            .doc(user)
+            .collection(projectId)
+            .doc(category)
+            .delete()
+            .then(() => {
+                console.log('deleted ' + category)
+                updateCategories()
+            })
+            .catch((e) => {
+                console.error('failed to delete ' + category)
+            })
+
+        
+    }
     
 
     return (
@@ -242,14 +311,16 @@ export default function ProjectDisplay(props) {
             {
                 categories ? 
                     categories.map((category) => {
-
                         return (
                                 <Category 
+                                    key={category.key}
                                     colors={category.colors} 
                                     name = {category.id}
                                     getColors={(title) => {getColors(title)}}
                                     addColor={(name, color, category) => {addColor(name,color,category)}}
                                     removeColor={(name,category) => {removeColor(name,category)}}
+                                    removeCategory={(category) => {removeCategory(category)}}
+                                    refresh={() => {updateCategories()}}
                                 />
 
                         )

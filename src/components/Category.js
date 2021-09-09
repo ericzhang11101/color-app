@@ -194,11 +194,12 @@ const BtnContainer = styled.div`
 
 
 export default function Category(props) {
-    const {colors, name, addColor, removeColor} = props
+    const {colors, name, addColor, removeColor, removeCategory } = props
     
     const [ colorState, setColorState ] = useState({})
     const [addingColor,  setAddingColor] = useState(false)
     const [editingColor, setEditingColor] = useState(false)
+    
     const [edit, setEdit] = useState({
         value: "",
         truth: false,
@@ -272,16 +273,17 @@ export default function Category(props) {
     }
 
     function deleteCategory(categoryName){
-
+        removeCategory(categoryName)
     }
 
+    console.log('rendering ' + name)
     return (
         <CategoryDiv>
             <CategoryHeader>{name}</CategoryHeader>
             {
                 keys && keys.length > 0 ? 
+                    
                     keys.map(c =>{
-
                         return (
                             <ColorDisplay >
                                 <InfoGrid>

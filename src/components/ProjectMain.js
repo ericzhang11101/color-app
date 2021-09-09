@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import { Route, Switch, Link, BrowserRouter, RouteComponentProps} from 'react-router-dom' 
-
+import uniqid from 'uniqid'
 
 import Project from './Project.js'
 import ProjectDisplay from './ProjectDisplay.js'
@@ -47,9 +47,90 @@ export default function ProjectMain(props) {
     let [modalVisibility, setModalVisibility] = useState(true)
 
     useEffect(() => {
-        let db = firebase.firestore()
+        
 
         const getProjects = async function(){
+            let db = firebase.firestore()
+            let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+            let userInfo = await (await userRef.get()).data()
+            let userProjects = userInfo.indexes
+            
+            let projArr = []
+
+            let userPromise = new Promise((ressolve, reject) => {
+                userProjects.forEach(async (name) => {
+                    let tempProj = {
+                        name: name,
+                        categories: []
+                    }
+    
+                    let projectInfo = await userRef.collection(name).get()
+    
+                    if (projectInfo.docs.length > 0){
+                        // console.log(projectInfo.docs)
+                        await projectInfo.docs.forEach(async (doc) => {
+                            if (doc.id === '***info'){
+                                tempProj.description = await doc.data().Description
+                                tempProj.id = await doc.data().Id
+                            }
+                            else {
+                                // console.log('categories: ')
+                                // console.log('doc data: ' + doc.id)
+                                // console.log(await doc.data())
+                                let updatedCategories = [
+                                    ...tempProj.categories, 
+                                    {
+                                        id: doc.id,
+                                        colors: doc.data(),
+                                        key: uniqid()
+                                    }
+                                ]
+
+                                tempProj.categories = updatedCategories
+ 
+                            }
+                        })
+                        projArr.push(tempProj)
+                    }
+                    
+    
+                    
+                    if (userProjects.indexOf(name) === userProjects.length -1) ressolve()
+    
+                })
+            })
+
+            userPromise.then(() => {
+                setProjectArr(projArr)
+            })
+            
+            
+        }
+
+        if (user || true){
+            getProjects()   
+        }
+        
+    }, [modalVisibility])
+
+    useEffect(() => {
+        setModalVisibility(false)
+    }, [])
+
+    function displayProjectModal(){
+        setModalVisibility(true)
+        console.log('project visibiliy: ' + modalVisibility)
+    }
+
+    function hideProjectModal(){
+        setModalVisibility(false)
+    }
+
+    function updateProjects(){
+        
+
+        const getProjects = async function(){
+            let db = firebase.firestore()
             let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
             let userInfo = await (await userRef.get()).data()
             let userProjects = userInfo.indexes
@@ -101,27 +182,8 @@ export default function ProjectMain(props) {
             userPromise.then(() => {
                 setProjectArr(projArr)
             })
-            
-            
         }
-
-        if (user || true){
-            getProjects()   
-        }
-        
-    }, [modalVisibility])
-
-    useEffect(() => {
-        setModalVisibility(false)
-    }, [])
-
-    function displayProjectModal(){
-        setModalVisibility(true)
-        console.log('project visibiliy: ' + modalVisibility)
-    }
-
-    function hideProjectModal(){
-        setModalVisibility(false)
+        if (user || true) getProjects()
     }
 
     function getProject(id){
@@ -146,6 +208,7 @@ export default function ProjectMain(props) {
                                 project={() => {
                                     return getProject(id)
                                 }} 
+                                updateProjects={() => {updateProjects()}}
                             />)
                         // return (
                         //     <ProjectDisplay 
