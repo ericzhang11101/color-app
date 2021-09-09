@@ -28,6 +28,7 @@ const NewCategoryButton = styled.button`
     font-size: 1.25rem;
     font-weight: 200;
     box-sizing: border-box;
+    margin-bottom: 1rem;
     &:hover { 
         cursor: pointer;
     }
@@ -107,8 +108,7 @@ export default function ProjectDisplay(props) {
 
         }
 
-        
-
+    
         update()
 
         console.log('updating')
@@ -181,20 +181,45 @@ export default function ProjectDisplay(props) {
     }
 
 
-    function getCategories(){
+    async function addColor(name, color, category){
         let db = firebase.firestore()
         let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
-
         let projectId = props.id 
-
-
-        let data = db 
-        .collection('Users')
-        .doc(user)
-        .collection(projectId)
-        .get()
-
         
+
+        name = name.toLowerCase().trim()
+        await db 
+            .collection('Users')
+            .doc(user)
+            .collection(projectId)
+            .doc(category)
+            .update({
+                [name]: color
+            })
+
+        hideModal()
+
+        // update 
+
+    }
+
+    async function removeColor(name, category){
+        let db = firebase.firestore()
+        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
+        let projectId = props.id 
+        
+
+        name = name.toLowerCase().trim()
+        await db 
+            .collection('Users')
+            .doc(user)
+            .collection(projectId)
+            .doc(category)
+            .update({
+                [name]: firebase.firestore.FieldValue.delete()
+            })
+
+        hideModal()
     }
 
     
@@ -223,6 +248,8 @@ export default function ProjectDisplay(props) {
                                     colors={category.colors} 
                                     name = {category.id}
                                     getColors={(title) => {getColors(title)}}
+                                    addColor={(name, color, category) => {addColor(name,color,category)}}
+                                    removeColor={(name,category) => {removeColor(name,category)}}
                                 />
 
                         )
