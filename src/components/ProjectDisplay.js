@@ -257,14 +257,6 @@ export default function ProjectDisplay(props) {
             })
 
         
-        // let temp = [...categories]
-
-        // for (let i = 0; i < temp.length; i++){
-        //     if (temp[i].id === category){
-        //         temp[i].key = uniqid()
-        //     }
-        // }
-        // setCategories(temp)
     }
 
     async function removeCategory(category){

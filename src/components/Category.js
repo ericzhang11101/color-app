@@ -4,6 +4,7 @@ import styled from 'styled-components'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { FaEdit, FaCopy, FaTrash } from "react-icons/fa"; 
+import {validColor} from '../colorTest.js'
 
 const AddColorDisplay = styled.div`
     width: calc(100% - 1rem);
@@ -191,6 +192,17 @@ const BtnContainer = styled.div`
     user-select: none;
 `
 
+const ColoredDiv = styled.div`
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    height: 3.75rem;
+    border: 1px solid black;
+    margin-top: 0.5rem;
+
+    background: ${props => props.color || 'magenta'}
+`
+
 
 
 export default function Category(props) {
@@ -233,7 +245,6 @@ export default function Category(props) {
         const name = e.target.name.value
         const color = e.target.color.value
 
-        console.log(categoryName)
 
         await addColor(name, color, categoryName)
 
@@ -242,6 +253,8 @@ export default function Category(props) {
 
     function editColor(c){
         setAddingColor(false)
+
+        
         setEditingColor({
             value: c,
             truth: true,
@@ -261,11 +274,17 @@ export default function Category(props) {
 
     }
 
+    function checkColorAndSave(color){
+
+    }
+
     async function handleEditSubmit(e, categoryName){
         e.preventDefault()
 
         const name = e.target.name.value
         const color = e.target.color.value
+
+
 
         await addColor(name, color, categoryName)
 
@@ -276,6 +295,7 @@ export default function Category(props) {
         removeCategory(categoryName)
     }
 
+    
     console.log('rendering ' + name)
     return (
         <CategoryDiv>
@@ -291,7 +311,8 @@ export default function Category(props) {
                                         <h2>{c}</h2>
                                     </ColorHeader>
                                 </InfoGrid>
-
+                                <ColoredDiv>
+                                </ColoredDiv>
 
                                 <BtnGrid>
                                     <Button >
