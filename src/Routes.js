@@ -60,6 +60,8 @@ export default function Routes() {
                             <Route path="/login">
                                 <SignIn />
                             </Route>
+
+                            <Route component={Homepage} />
                     </Switch>
                 </div>
             </UserContext.Provider>
