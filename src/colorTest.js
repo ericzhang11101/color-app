@@ -4,36 +4,45 @@ let validColors = ["black","navy","darkblue","mediumblue","blue","darkgreen","gr
 
 
 function checkColorType(color){
+     let retObj = { }
      color = color.trim().toLowerCase()
      
      if (color.charAt(0) == '#'){
-          return 'hex'
+          if (color.length === 7 || color.length == 4){
+               retObj.type = 'hex'
+               return retObj
+          }
+          else if (color.length == 5 || color.length == 8){
+               retObj.type =  'hexa'
+          }
+          retObj.val = color.substring(1)
+
      }
      else if (color.indexOf('rgba') !==  -1){
-          return 'rgba'
+          retObj.type =  'rgba'
      }
      else if (color.indexOf('rgb') !== -1){
-          return 'rgb'
+          retObj.type =  'rgb'
      }
      else if (color.indexOf('hsla') !== -1){
-          return 'hsla'
+          retObj.type =  'hsla'
      }
      else if (color.indexOf('hsl') !== -1){
-          return 'hsl'
+          retObj.type =  'hsl'
      }
      else if (color.indexOf('hwb') !== -1){
-          return 'rgb'
+          retObj.type =  'rgb'
      }
      else if (color.indexOf('cmyk') !== -1){
-          return 'hsl'
+          retObj.type =  'hsl'
      }
      else if (color.indexOf('ncol') !== -1){
-          return 'hsl'
+          retObj.type =  'hsl'
      }
      else if (validColors.indexOf(color) !== -1){
-     	return 'string'
+     	retObj.type =  'string'
      }
-     else return '?'
+
 }
 
 function validColor(color){
@@ -47,13 +56,19 @@ function getHsla(color){
      
 
      // check type
-
+     console.log('getting hsla')
      const type = checkColorType(color)
      // convert
 
+     let newColor;
+     
      switch (type){
           case 'hex': 
-
+               
+               let newColor = convert.hsl.hex()
+               console.log('hex')
+               
+               
                break;
           case 'rgb': 
 
@@ -79,6 +94,7 @@ function getHsla(color){
           default:
           
      }
+     console.log(newColor)
 }
 
 // convert to hsla 
@@ -96,4 +112,4 @@ function getHsla(color){
 // hsl
 
 
-export { validColor, }
+export { validColor, getHsla}

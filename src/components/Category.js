@@ -4,7 +4,7 @@ import styled from 'styled-components'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { FaEdit, FaCopy, FaTrash } from "react-icons/fa"; 
-import {validColor} from '../colorTest.js'
+import {validColor, getHsla} from '../colorTest.js'
 
 const AddColorDisplay = styled.div`
     width: calc(100% - 1rem);
@@ -51,6 +51,7 @@ const InputRow = styled.div`
     }
     &  > label{
         font-size: 1.25rem;
+        user-select: none;
     }
 
 `
@@ -76,6 +77,7 @@ const ButtonRow = styled.div`
         font-weight: 1000;
         padding: 0 0.5rem;
         margin: 0 0.25rem;
+        user-select: none;
         &:hover{
             cursor: pointer;
 
@@ -124,14 +126,6 @@ const ColorHeader = styled.div`
         transform: translateY(-4.5rem);
     }
 
-`
-
-const ColoredDivRight = styled.div`
-    background-color: ${props => props.bgColor || "white"};
-    width: 10rem;
-    height: 0;
-    border-bottom: calc(5rem - 6px) solid white;
-    border-left: 5rem solid ${props => props.bgColor || "white"};
 `
 
 const Button = styled.div`
@@ -197,8 +191,10 @@ const ColoredDiv = styled.div`
     box-sizing: border-box;
     padding: 0.5rem;
     height: 3.75rem;
-    border: 1px solid black;
+    border: 1 px solid black;
     margin-top: 0.5rem;
+    transform: skew(-50deg);
+    border: 1px solid black;
 
     background: ${props => props.color || 'magenta'}
 `
@@ -238,18 +234,6 @@ export default function Category(props) {
         setAddingColor(false)
     }
 
-    async function handleSubmit(e, categoryName){
-        e.preventDefault()
-        
-        const form = document.getElementById('form')
-        const name = e.target.name.value
-        const color = e.target.color.value
-
-
-        await addColor(name, color, categoryName)
-
-        cancelAddColor()
-    }
 
     function editColor(c){
         setAddingColor(false)
@@ -274,19 +258,35 @@ export default function Category(props) {
 
     }
 
-    function checkColorAndSave(color){
+    async function handleSubmit(e, categoryName){
+        
+        e.preventDefault()
 
+        console.log('submit')
+        const name = e.target.name.value
+        let color = e.target.color.value
+
+        if (validColor(color)){
+            await addColor(name, color, categoryName)
+        }
+        else (alert('invalid color'))
+
+        cancelAddColor()
     }
 
     async function handleEditSubmit(e, categoryName){
         e.preventDefault()
 
         const name = e.target.name.value
-        const color = e.target.color.value
+        let color = e.target.color.value
 
+        if (validColor(color)){
+            await addColor(name, color, categoryName)
+        }
+        else (alert('invalid color'))
+        color = getHsla(color)
 
-
-        await addColor(name, color, categoryName)
+        
 
         cancelEditColor()
     }
@@ -295,6 +295,9 @@ export default function Category(props) {
         removeCategory(categoryName)
     }
 
+    function checkInput(color){
+        return validColor(color)
+    }
     
     console.log('rendering ' + name)
     return (
@@ -304,6 +307,7 @@ export default function Category(props) {
                 keys && keys.length > 0 ? 
                     
                     keys.map(c =>{
+                        console.log(colorState[c])
                         return (
                             <ColorDisplay >
                                 <InfoGrid>
@@ -311,12 +315,13 @@ export default function Category(props) {
                                         <h2>{c}</h2>
                                     </ColorHeader>
                                 </InfoGrid>
-                                <ColoredDiv>
+                                <ColoredDiv color={colorState[c]}>
+
                                 </ColoredDiv>
 
                                 <BtnGrid>
                                     <Button >
-                                        <FaCopy 
+                                        <FaCopy onClick={() => {navigator.clipboard.writeText(colorState[c])}}
                                             style={
                                                 {
                                                     size: "10rem"
