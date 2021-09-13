@@ -69,18 +69,6 @@ export default function Homepage() {
         setUser()
     }
 
-    // firebase.firestore().collection('test').add({
-    //     message: 'test',
-    //     value: 5
-    // })
-
-    
-    // firebase.firestore().collection('Users').get().then((querySnapshot) =>{
-    //     querySnapshot.forEach((doc) =>{
-    //         console.log(doc.id)
-    //     })
-    // })
-
     let db = firebase.firestore()
 
     if (user){
@@ -89,7 +77,6 @@ export default function Homepage() {
             if (doc.exists) {
                 console.log("Document data:", doc.data());
             } else {
-                // doc.data() will be undefined in this case
                 console.log("No such document!");
                 db.collection('Users').doc(user.email).set({
                     exists: true
@@ -99,21 +86,18 @@ export default function Homepage() {
             console.log("Error getting document:", error);
         });
     }
-    
-    
-    
-
-
-   
 
     
     
     return (
         <FlexContainer>
-            <Card to="/projects">
+            {
+                user &&
+                <Card to="/projects">
                 
-                <h2>Projects</h2>
-            </Card>
+                    <h2>Projects</h2>
+                </Card>
+            }
             {
                 !user  &&
                     <Card to="/login">

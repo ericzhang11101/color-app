@@ -5,6 +5,7 @@ import styled from 'styled-components'
 
 import { FaEdit, FaCopy, FaTrash } from "react-icons/fa"; 
 import {validColor, getHsla} from '../colorTest.js'
+import CopiedPopup from './CopiedPopup.js';
 
 const AddColorDisplay = styled.div`
     width: calc(100% - 1rem);
@@ -207,13 +208,8 @@ export default function Category(props) {
     const [ colorState, setColorState ] = useState({})
     const [addingColor,  setAddingColor] = useState(false)
     const [editingColor, setEditingColor] = useState(false)
+    const [popupVisibility, setPopupVisibility] = useState(false)
     
-    const [edit, setEdit] = useState({
-        value: "",
-        truth: false,
-        category: ""
-    })
-
     useEffect(() => {
         if (colors) setColorState(colors)
         
@@ -245,7 +241,6 @@ export default function Category(props) {
             category: name
         })
 
-        console.log(editingColor.truth)
 
     }
 
@@ -258,11 +253,17 @@ export default function Category(props) {
 
     }
 
+    async function flashPopup(){
+        await setPopupVisibility(true)
+        setTimeout(() => {
+            setPopupVisibility(false)
+        },1000)
+    }
+
     async function handleSubmit(e, categoryName){
         
         e.preventDefault()
 
-        console.log('submit')
         const name = e.target.name.value
         let color = e.target.color.value
 
@@ -294,12 +295,6 @@ export default function Category(props) {
     function deleteCategory(categoryName){
         removeCategory(categoryName)
     }
-
-    function checkInput(color){
-        return validColor(color)
-    }
-    
-    console.log('rendering ' + name)
     return (
         <CategoryDiv>
             <CategoryHeader>{name}</CategoryHeader>
@@ -307,7 +302,7 @@ export default function Category(props) {
                 keys && keys.length > 0 ? 
                     
                     keys.map(c =>{
-                        console.log(colorState[c])
+
                         return (
                             <ColorDisplay >
                                 <InfoGrid>
@@ -321,7 +316,11 @@ export default function Category(props) {
 
                                 <BtnGrid>
                                     <Button >
-                                        <FaCopy onClick={() => {navigator.clipboard.writeText(colorState[c])}}
+                                        <FaCopy onClick={() => {
+                                            flashPopup()
+                                            navigator.clipboard.writeText(colorState[c])
+                                            
+                                        }}
                                             style={
                                                 {
                                                     size: "10rem"
@@ -384,7 +383,7 @@ export default function Category(props) {
                                 </InputCol>
 
                                 <ButtonRow>
-                                    <button onClick={() => {cancelAddColor()}}>
+                                    <button type="button" onClick={() => {cancelAddColor()}}>
                                         cancel
                                     </button>
                                     <button type='submit'>
@@ -432,7 +431,7 @@ export default function Category(props) {
                                 </InputCol>
 
                                 <ButtonRow>
-                                    <button onClick={() => {cancelEditColor()}}>
+                                    <button type="button"  onClick={() => {cancelEditColor()}}>
                                         cancel
                                     </button>
                                     <button type='submit'>
@@ -445,7 +444,10 @@ export default function Category(props) {
                     
                     null
             }
-            
+            {
+                popupVisibility &&
+                <CopiedPopup />
+            }
         </CategoryDiv>
     )
 }

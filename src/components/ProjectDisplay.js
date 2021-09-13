@@ -88,7 +88,7 @@ export default function ProjectDisplay(props) {
     useEffect(() => {
         async function update(){
             let db = firebase.firestore()
-            let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+            let userRef = db.collection('Users').doc(user.email)
             let projectInfo = await userRef.collection(props.id).get()
             
             let newCategories = []
@@ -115,7 +115,7 @@ export default function ProjectDisplay(props) {
 
     async function updateCategories(){
         let db = firebase.firestore()
-        let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+        let userRef = db.collection('Users').doc(user.email)
 
         let projInfo = await userRef.collection(props.id).get()
 
@@ -140,7 +140,6 @@ export default function ProjectDisplay(props) {
 
         projectPromsise.then(() => {
             setCategories(tempCategories)
-            console.log(tempCategories)
             
         }) 
     }
@@ -156,30 +155,26 @@ export default function ProjectDisplay(props) {
 
     async function addCategory(name){
 
-        console.log('adding: ' + name)
         
         let db = firebase.firestore()
-        let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
-        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
+        let userRef = db.collection('Users').doc(user.email)
 
         await db 
             .collection('Users')
-            .doc(user)
+            .doc(user.email)
             .collection(props.id)
             .doc(name)
             .get()
             .then((snapshot) => {
-                console.log(snapshot.exists)
                 if (snapshot.exists) {
                     // handle existing thign 
                     // show some popup
-                    console.log('already exists!')
+                    alert('Category Already Exists')
                 }
                 else {
-                    console.log('adding new')
                     db
                         .collection('Users')
-                        .doc(user)
+                        .doc(user.email)
                         .collection(props.id)
                         .doc(name)
                         .set({
@@ -202,11 +197,10 @@ export default function ProjectDisplay(props) {
 
     function getColors(title){
         let db = firebase.firestore()
-        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
 
         db 
         .collection('Users')
-        .doc(user)
+        .doc(user.email)
         .collection(title)
         .docs()
     }
@@ -214,13 +208,12 @@ export default function ProjectDisplay(props) {
 
     async function addColor(name, color, category){
         let db = firebase.firestore()
-        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
         let projectId = props.id 
     
         name = name.toLowerCase().trim()
         await db 
             .collection('Users')
-            .doc(user)
+            .doc(user.email)
             .collection(projectId)
             .doc(category)
             .update({
@@ -239,14 +232,13 @@ export default function ProjectDisplay(props) {
 
     async function removeColor(name, category){
         let db = firebase.firestore()
-        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
         let projectId = props.id 
         
 
         name = name.toLowerCase().trim()
         await db 
             .collection('Users')
-            .doc(user)
+            .doc(user.email)
             .collection(projectId)
             .doc(category)
             .update({
@@ -260,21 +252,17 @@ export default function ProjectDisplay(props) {
     }
 
     async function removeCategory(category){
-        console.log('removing ' + category)
-
         let db = firebase.firestore()
-        let user = 'e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com'
         let projectId = props.id
         // switch to context user
 
         db
             .collection('Users')
-            .doc(user)
+            .doc(user.email)
             .collection(projectId)
             .doc(category)
             .delete()
             .then(() => {
-                console.log('deleted ' + category)
                 updateCategories()
             })
             .catch((e) => {

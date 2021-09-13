@@ -32,7 +32,6 @@ export default function Routes() {
     const [user, setUser] = useState()
 
     if (user){
-        console.log(user)
         if (user.a == null) setUser()
     }
      

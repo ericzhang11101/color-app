@@ -39,7 +39,6 @@ const ProjectsDisplay = styled.div`
 `
 
 export default function ProjectMain(props) {
-    // console.log(props)
     const {projects} = props
     
     let {user, setUser} = useContext(UserContext)
@@ -51,7 +50,7 @@ export default function ProjectMain(props) {
 
         const getProjects = async function(){
             let db = firebase.firestore()
-            let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+            let userRef = db.collection('Users').doc(user.email)
             let userInfo = await (await userRef.get()).data()
             let userProjects = userInfo.indexes
             
@@ -67,16 +66,12 @@ export default function ProjectMain(props) {
                     let projectInfo = await userRef.collection(name).get()
     
                     if (projectInfo.docs.length > 0){
-                        // console.log(projectInfo.docs)
                         await projectInfo.docs.forEach(async (doc) => {
                             if (doc.id === '***info'){
                                 tempProj.description = await doc.data().Description
                                 tempProj.id = await doc.data().Id
                             }
                             else {
-                                // console.log('categories: ')
-                                // console.log('doc data: ' + doc.id)
-                                // console.log(await doc.data())
                                 let updatedCategories = [
                                     ...tempProj.categories, 
                                     {
@@ -119,7 +114,6 @@ export default function ProjectMain(props) {
 
     function displayProjectModal(){
         setModalVisibility(true)
-        console.log('project visibiliy: ' + modalVisibility)
     }
 
     function hideProjectModal(){
@@ -131,7 +125,7 @@ export default function ProjectMain(props) {
 
         const getProjects = async function(){
             let db = firebase.firestore()
-            let userRef = db.collection('Users').doc('e.r.i.c.r.e.n.z.h.a.n.g.3.2.1@gmail.com')
+            let userRef = db.collection('Users').doc(user.email)
             let userInfo = await (await userRef.get()).data()
             let userProjects = userInfo.indexes
             
@@ -147,16 +141,13 @@ export default function ProjectMain(props) {
                     let projectInfo = await userRef.collection(name).get()
     
                     if (projectInfo.docs.length > 0){
-                        // console.log(projectInfo.docs)
                         await projectInfo.docs.forEach(async (doc) => {
                             if (doc.id === '***info'){
                                 tempProj.description = await doc.data().Description
                                 tempProj.id = await doc.data().Id
                             }
                             else {
-                                // console.log('categories: ')
-                                // console.log('doc data: ' + doc.id)
-                                // console.log(await doc.data())
+
                                 let updatedCategories = [
                                     ...tempProj.categories, 
                                     {
@@ -188,8 +179,7 @@ export default function ProjectMain(props) {
 
     function getProject(id){
         for (let i = 0; i < projectArr.length; i++){
-            if (projectArr[i].name == id) {
-                // console.log(projectArr[i])
+            if (projectArr[i].name === id) {
                 return projectArr[i]
         }
             }
@@ -210,16 +200,9 @@ export default function ProjectMain(props) {
                                 }} 
                                 updateProjects={() => {updateProjects()}}
                             />)
-                        // return (
-                        //     <ProjectDisplay 
-                        //         id={id} 
-                        //         project={() => {
-                        //             return getProject(id)
-                        //         }} 
-                        //     />)
+
                     }}
                 />
-                {/* project id -> look through redux and render correct one */}
                 <Route path='/projects' exact>
                     <div>
                         <PageHeader>

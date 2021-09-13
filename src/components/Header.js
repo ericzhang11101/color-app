@@ -66,10 +66,6 @@ export default function Header() {
 
     const history = useHistory()
 
-    if (user){
-        // console.log(user.photoURL)
-    }
-
     return (
         <HeaderMain>
             <HeaderTitle to="/home">

@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useContext} from 'react'
 import styled from 'styled-components'
 import { Link, RouteComponentProps } from 'react-router-dom'
 import ColorPreview from './ColorPreview.js'
-
+import firebase from '../config/firebase-config'
+import { UserContext } from './UserContext'
 
 const StyledProject = styled(Link)`
     height: 11rem;
@@ -67,11 +68,15 @@ const XButton = styled.button`
 export default function Project(props) {
 
     const { project } = props
-
-    // console.log(props)
-    // let p = props.project
-    // console.log(p)
+    const {user, setUser} = useContext(UserContext)
     
+    async function deleteProject(projectName){
+        let db = firebase.firestore()
+
+        db
+            .collection('Users')
+            .doc(user.email)
+    }
 
     return (
         <div>
@@ -85,7 +90,7 @@ export default function Project(props) {
                     </ProjectDescription>
                 </div>
                 <div className="project-other-container">
-                    <XButton>
+                    <XButton onClick={() => deleteProject(project.name)}>
                         X
                     </XButton>
                     <ColorPreview>
