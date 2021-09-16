@@ -82,12 +82,15 @@ export default function ProjectModal(props) {
     async function addProject(e){
         e.preventDefault()
         let title = e.target.title.value
-        let description = ""        
+        let description = " "        
         if (e.target.description){
             description = e.target.description.value
         }
 
         let projects = await getProjectList()
+        if (projects == null) projects = []
+        console.log('projects')
+        console.log(projects)
         if (projects && indexOfSimilar(projects, title) === -1){
             Promise.all([addProjectToList(title), storeProject(title, description)]).then(() => {
                 closeModal()
@@ -115,7 +118,8 @@ export default function ProjectModal(props) {
         let userRef = db.collection('Users').doc(user.email)
 
         let userInfo = await (await userRef.get()).data()
-        let userProjects = userInfo.indexes
+        let userProjects = []
+        if (userInfo && userInfo.indexes) userProjects = userInfo.indexes
         return userProjects
     }
 
@@ -124,9 +128,20 @@ export default function ProjectModal(props) {
         let userRef = db.collection('Users').doc(user.email)
 
         let userInfo = await (await userRef.get()).data()
-        let updateUserInfo = userRef.update({
-            indexes: [...userInfo.indexes, title]
-        })
+        console.log(userInfo)
+        if (userInfo && userInfo.indexes) {
+            console.log('existing info')
+            let updateUserInfo = userRef.update({
+                indexes: [...userInfo.indexes, title]
+            })
+        }
+        else{
+            console.log('no existing')
+            let updateUserInfo = userRef.update({
+                indexes: [title]
+            })
+        }
+
     }
 
     const storeProject = async function(title, description){

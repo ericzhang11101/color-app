@@ -52,11 +52,17 @@ export default function ProjectMain(props) {
             let db = firebase.firestore()
             let userRef = db.collection('Users').doc(user.email)
             let userInfo = await (await userRef.get()).data()
-            let userProjects = userInfo.indexes
+            
+            let userProjects = null
+            if (userInfo && userInfo.indexes) {
+                userProjects = userInfo.indexes
+            }
+
             
             let projArr = []
 
             let userPromise = new Promise((ressolve, reject) => {
+                if (!userProjects) ressolve()
                 userProjects.forEach(async (name) => {
                     let tempProj = {
                         name: name,

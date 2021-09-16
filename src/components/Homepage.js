@@ -78,15 +78,18 @@ export default function Homepage() {
                 console.log("Document data:", doc.data());
             } else {
                 console.log("No such document!");
-                db.collection('Users').doc(user.email).set({
-                    exists: true
-                })
+                setNew()
             }
         }).catch((error) => {
             console.log("Error getting document:", error);
         });
     }
 
+    async function setNew(){
+        await db.collection('Users').doc(user.email).set({
+            indexes: []
+        })
+    }
     
     
     return (
