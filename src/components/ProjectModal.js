@@ -131,13 +131,13 @@ export default function ProjectModal(props) {
         console.log(userInfo)
         if (userInfo && userInfo.indexes) {
             console.log('existing info')
-            let updateUserInfo = userRef.update({
+            let updateUserInfo = await userRef.update({
                 indexes: [...userInfo.indexes, title]
             })
         }
         else{
             console.log('no existing')
-            let updateUserInfo = userRef.update({
+            let updateUserInfo = await userRef.update({
                 indexes: [title]
             })
         }
@@ -148,7 +148,7 @@ export default function ProjectModal(props) {
         let db = firebase.firestore()
 
 
-        db 
+        await db 
             .collection('Users')
             .doc(user.email)
             .collection(title)

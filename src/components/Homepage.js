@@ -71,6 +71,8 @@ export default function Homepage() {
 
     let db = firebase.firestore()
 
+    console.log('production')
+    
     if (user){
         var docRef = db.collection('Users').doc(user.email)
         docRef.get().then((doc) => {

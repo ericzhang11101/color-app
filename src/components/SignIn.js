@@ -34,13 +34,13 @@ export default function SignIn() {
         
         const login = await socialMediaAuth(googleProvider)
         setUser(login, () => {
-            history.push('/projects')
+            history.push('/home')
         })
     }
 
     useEffect(() =>{
         if (user){
-            history.push('/projects')
+            history.push('/home')
         }
     }, [user])
 
@@ -54,12 +54,7 @@ export default function SignIn() {
             <LoginButton onClick={() => handleLogin()}>
                 Login with Google
             </LoginButton>
-            {/* <h1>
-                
-            </h1> */}
-            {/* <LoginButton onClick={() => handleLogOut()}>
-                Log Out
-            </LoginButton> */}
+
         </div>
     )
 }
